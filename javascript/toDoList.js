@@ -3,24 +3,23 @@ var doneArray = [];
 
 function init() {
 
-    // Kollar om min localstorage är tom eller null då läggs min lista i localstorage annars hämta det som finns i localstorage.
-    if (localStorage.getItem("myStoredToDoArray") == null || localStorage.getItem("myStoredToDoArray") == "[]") {
+    //Hämtar från localstorage och sprarar i variabler
+    doneArray = localStorage.getItem("myStoredDoneArray");
+    myToDoArray = localStorage.getItem("myStoredToDoArray");
 
-         myToDoArray = ["Take André to the doctor", "Meet Alexa", "Have a strawberrydaq", "watch the last episode of Riverdale", "By a new dress"];
+    // Kollar om min localstorage är null, då läggs min hårdkodade lista till
+    if (myToDoArray === null) {
+
+        myToDoArray = ["Take André to the doctor", "Meet Alexa", "Have a strawberrydaq", "watch the last episode of Riverdale", "By a new dress"];
         localStorage.setItem("myStoredToDoArray", JSON.stringify(myToDoArray));
-
-    } else {
-        var myToDoArray = JSON.parse(localStorage.getItem('myStoredToDoArray'));
+    } 
+    //om doneArray inte är satt, så lägger jag den som tom, och sparar den i localstorage som en tom array
+    if (doneArray === null) {
+        doneArray = [];
+        localStorage.setItem("myStoredDoneArray", JSON.stringify(doneArray));
     }
-
-    // Om det finns något i min localstorage hämta värderna och spara i en variabel.
-    if (localStorage.getItem("myStoredDoneArray")) {
-         doneArray = JSON.parse(localStorage.getItem('myStoredDoneArray'));
-    }
-
     printToDo();
 }
-
 
 function printToDo() {
     // Hämtar myToDoArray från Localstorage
@@ -28,13 +27,10 @@ function printToDo() {
 
     myToDoArray = JSON.parse(getMyToDoArray);
 
-
-
     // Hämtar doneArray från Localstorage
     var getMyDoneArray = localStorage.getItem("myStoredDoneArray");
 
     doneArray = JSON.parse(getMyDoneArray);
-
 
 
     // skriver ut myToDoArray 
@@ -60,11 +56,11 @@ function addItem() {
     var inputValue = document.getElementById("addedItemValue").value;
     myToDoArray.push(inputValue);
     save();
+    document.getElementById("addedItemValue").value = '';
     printToDo();
 }
 
 function moveToDone(id) {
-
     var moveThis = myToDoArray.splice(id, 1);
     var turnToString = moveThis.toString();
     doneArray.push(turnToString);
@@ -81,14 +77,14 @@ function moveToToDo(id) {
 }
 
 function sortMyList() {
-    myToDoArray.sort(function(x,y) {
-        var a = x.toLower();
-        var b = y.toLower();
+    myToDoArray.sort(function (x, y) {
+        var a = x.toLowerCase();
+        var b = y.toLowerCase();
 
         if (a < b) {
             return -1;
         }
-        if(a > b) {
+        if (a > b) {
             return 1;
         }
         return 0;
